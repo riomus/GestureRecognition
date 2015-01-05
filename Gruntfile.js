@@ -3,6 +3,11 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     pkg: grunt.file.readJSON('package.json'),
+    serve: {
+      options: {
+        port: 9000
+      }
+    },
 
     concat: {
       options: {
@@ -11,6 +16,8 @@ module.exports = function(grunt) {
       dist: {
         src: [
           'src/_intro.js',
+          'src/directionDiscretizer.js',
+          'src/opticalFlowTracker.js',
           'src/main.js',
           'src/_outro.js'
         ],
@@ -57,7 +64,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
-
+  grunt.loadNpmTasks('grunt-serve');
   grunt.registerTask('test', ['jshint', 'qunit']);
   grunt.registerTask('default', ['concat', 'jshint', 'qunit', 'uglify']);
 
