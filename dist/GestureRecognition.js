@@ -29,25 +29,21 @@
 
   var OpticalFlowTracker=function(providedConfig){
     this.config={
+      width:400,
+      height:300
     };
     for (var attrname in providedConfig)  {
         this.config[attrname] = providedConfig[attrname];
     }
     OpticalFlowTracker.base(this, 'constructor');
+    this.hornsService=new root.OpticalFlow(this.config);
+    this.lastFrame=new  root.Float64Array(this.config.width*this.config.height*4);
   };
 
   root.tracking.inherits(OpticalFlowTracker, root.tracking.Tracker);
 
-  OpticalFlowTracker.prototype.track = function(pixels,width,height) {
-    if(!this.initialized){
-      this.config.width=width;
-      this.config.height=height;
-      this.hornsService=new root.OpticalFlow(this.config);
-      this.initialized=true;
-    }else{
+  OpticalFlowTracker.prototype.track = function(pixels) {
     this.emit('track',this.hornsService.getFlowData([this.lastFrame,pixels]));
-    }
-
       this.lastFrame=pixels;
   };
 
@@ -74,8 +70,8 @@ var GestureRecognition = function(providedConfig) {
       element.style.position='absolute';
       element.style.left='-1000000000em';
       element.style.top='-10000000em';
-      element.style.width='160px';
-      element.style.height='120px';
+      element.style.width='400px';
+      element.style.height='300px';
       element.autoplay=true;
       element.preload=true;
       element.muted=true;
@@ -84,7 +80,6 @@ var GestureRecognition = function(providedConfig) {
       return element;
     },
     'opticalFlow':{},
-    'detect':true,
     'onMove':[],
     'minimalMovementVectorLength':0.05
   };
@@ -94,9 +89,6 @@ var GestureRecognition = function(providedConfig) {
 
   var hmmModel=new root.MultiGestureHMM(this.config.hmm);
   var opticalFlowTracker=new OpticalFlowTracker(this.config.opticalFlow);
-  var gatheringGesture=false;
-  var currentlyGatheredGesture=[];
-  var gestures=[];
 
   var triggerOnMove=function(directionSymbol){
     this.config.onMove.forEach(function(callback){callback(directionSymbol);});
@@ -115,26 +107,6 @@ var GestureRecognition = function(providedConfig) {
     this.config.onMove.push(callback);
   };
 
-  this.clearGatheredGestures=function(){
-    gestures=[];
-    currentlyGatheredGesture=[];
-  };
-
-  this.startGestureGathering=function(){
-    gatheringGesture=true;
-    currentlyGatheredGesture=[];
-  };
-
-  this.stopGestureGathering=function(){
-    gatheringGesture=false;
-    gestures.push(currentlyGatheredGesture);
-  };
-
-  this.teachGatheredGestures=function(gestureName){
-    this.teach(gestureName,gestures);
-    this.clearGatheredGestures();
-  };
-
   this.startTracking=function(){
    root.tracking.track(this.config.getVideoElement(), opticalFlowTracker, { camera: true });
  };
@@ -148,19 +120,11 @@ opticalFlowTracker.on('track',function(data){
  var vectorLength=Math.sqrt(movementVector[0]*movementVector[0]+movementVector[1]*movementVector[1]);
 
  if(vectorLength>this.config.minimalMovementVectorLength){
-
    var directionAngle=Math.atan2(movementVector[1],movementVector[0]);
    var directionSymbol=discretizeDirection(directionAngle);
-
-   if(this.config.detect){
-     triggerOnMove(directionSymbol);
-     hmmModel.newSymbol(directionSymbol);
-   }
-
-   if(gatheringGesture){
-    currentlyGatheredGesture.push(directionSymbol);
-  }
-}
+   triggerOnMove(directionSymbol);
+   hmmModel.newSymbol(directionSymbol);
+ }
 }.bind(this));
 
 };
