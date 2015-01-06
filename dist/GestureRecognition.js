@@ -37,7 +37,7 @@
     }
     OpticalFlowTracker.base(this, 'constructor');
     this.hornsService=new root.OpticalFlow(this.config);
-    this.lastFrame=new  root.Float64Array(this.config.width*this.config.height*4);
+    this.lastFrame=new root.Uint8ClampedArray(this.config.width*this.config.height*4);
   };
 
   root.tracking.inherits(OpticalFlowTracker, root.tracking.Tracker);
@@ -58,20 +58,20 @@ root.OpticalFlowTracker=OpticalFlowTracker;
 var GestureRecognition = function(providedConfig) {
   this.config={
     'hmm':{
-      'states':['a','b','c','d','e','f','g','h'],
+      'states':['a','b','c'],
       'symbols':['E','NE','N','NW','W','WS','S','ES'],
-      'startProbability':{'a':0.1,'b':0.1,'c':0.1,'d':0.1,'e':0.1,'f':0.1,'g':0.1,'h':0.1,'i':0.1,'j':0.1}
+      'startProbability':{'a':0.1,'b':0.1,'c':0.1}
     },
     'gestures':{
-      'right':[["W","W"],["W","W"],["W","W","W"],["W","W","W"],["W","W","W"],["W","W","W"],["WS","W","W"]]
+      'right':[["W","W","W","W","W","W","W","W"],["W","W","W","W","W","W","W","W"],["W","W","W","W","W","W","W","W"],["W","W","W","W","W","W","W","W"],["W","W","W","W","W","WS","W","W"],["W","WS","W","W","W","W","W","W"]]
     },
     'getVideoElement':function(){
       var element=root.document.createElement('video');
       element.style.position='absolute';
       element.style.left='-1000000000em';
       element.style.top='-10000000em';
-      element.style.width='400px';
-      element.style.height='300px';
+      element.style.width='200px';
+      element.style.height='150px';
       element.autoplay=true;
       element.preload=true;
       element.muted=true;
@@ -79,7 +79,10 @@ var GestureRecognition = function(providedConfig) {
       root.document.body.appendChild(element);
       return element;
     },
-    'opticalFlow':{},
+    'opticalFlow':{
+      'width':200,
+      'height':150
+    },
     'onMove':[],
     'minimalMovementVectorLength':0.05
   };

@@ -8,7 +8,7 @@
     }
     OpticalFlowTracker.base(this, 'constructor');
     this.hornsService=new root.OpticalFlow(this.config);
-    this.lastFrame=new  root.Float64Array(this.config.width*this.config.height*4);
+    this.lastFrame=new root.Uint8ClampedArray(this.config.width*this.config.height*4);
   };
 
   root.tracking.inherits(OpticalFlowTracker, root.tracking.Tracker);
