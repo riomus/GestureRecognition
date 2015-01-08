@@ -24,6 +24,17 @@ module.exports = function(grunt) {
         dest: 'dist/<%= pkg.name.replace(".js", "") %>.js'
       }
     },
+    copy: {
+      dist: {
+        files: [
+          { expand: true, flatten: true, src: ['bower_components/**/build/*.js'], dest: 'demo/js/' },
+          { expand: true, flatten: true, src: ['bower_components/**/dist/*.js'], dest: 'demo/js/' },
+          { expand: true, flatten: true, src: ['dist/*.js'], dest: 'demo/js/' }
+        ]
+      }
+    },
+
+    clean: ['demo/js'],
 
     uglify: {
       options: {
@@ -65,7 +76,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-serve');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.registerTask('test', ['jshint', 'qunit']);
-  grunt.registerTask('default', ['concat', 'jshint', 'qunit', 'uglify']);
+  grunt.registerTask('default', ['concat', 'jshint', 'qunit', 'uglify','clean','copy']);
 
 };

@@ -20,10 +20,10 @@
     <p>Check out the <a href="https://github.com/riomus/GestureRecognition">project repo</a>.
     <p>Copyright 2014 Roman Bartusiak</p>
 
-    <script src="./../bower_components/tracking.js/build/tracking-min.js"></script>
-    <script src="./../bower_components/hmm.js/dist/HMM.js"></script>
-    <script src="./../bower_components/optical-flow.js/dist/OpticalFlow.js"></script>
-    <script src="./../dist/GestureRecognition.js"></script>
+    <script src="js/tracking-min.js"></script>
+    <script src="js/HMM.min.js"></script>
+    <script src="js/OpticalFlow.min.js"></script>
+    <script src="js/GestureRecognition.min.js"></script>
 
     <script>
       /* begin demo script */
@@ -56,7 +56,6 @@
       var timer=setTimeout(function(){},0);
       gestureRecognition.onDetect(function(data){
         clearTimeout(timer);
-        console.log(data);
         gestureElement.innerHTML=data.name+' '+data.data[0];
         timer=setTimeout(function(){
         gestureElement.innerHTML='';
