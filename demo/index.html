@@ -21,9 +21,9 @@
     <p>Copyright 2014 Roman Bartusiak</p>
 
     <script src="js/tracking-min.js"></script>
-    <script src="js/HMM.min.js"></script>
+    <script src="js/HMM.js"></script>
     <script src="js/OpticalFlow.min.js"></script>
-    <script src="js/GestureRecognition.min.js"></script>
+    <script src="js/GestureRecognition.js"></script>
 
     <script>
       /* begin demo script */
@@ -42,6 +42,15 @@
       element.looped=true;
       document.body.appendChild(element);
       return element;
+    },
+    'gestures':{
+      'hearth':[["NE","W","W","W","WS","WS","WS","S","S","NE","N","N","W","WS","WS","WS","S","S","ES","ES","ES"],["NE","NE","E","E","E","W","W","W","WS","WS","S","S","N","NW","W","WS","WS","S","ES","ES","ES"],["NE","E","E","S","W","W","WS","WS","WS","S","ES","N","W","WS","WS","S","S","ES","ES"],["NE","E","E","W","WS","WS","WS","S","NE","N","NW","WS","WS","WS","S","S","S","S","ES","ES"],["E","E","E","E","W","W","WS","WS","WS","NE","N","W","WS","WS","S","ES","E"],["NE","NE","E","E","NW","W","W","W","WS","WS","WS","NE","N","NW","W","WS","WS","WS","S","S","S"],["N","NE","NE","NE","NE","NE","N","NW","W","WS","WS","WS","N","N","NW","W","WS","S","S","ES","E","ES"],["NE","NE","NE","N","NW","W","W","W","WS","WS","WS","WS","WS","S","NE","N","NW","W","WS","WS","WS","S","S","ES","ES"],["NE","NE","E","NE","E","E","WS","WS","WS","WS","WS","NE","N","N","W","WS","WS","WS","S","S","ES","ES","ES","ES"]]
+    },
+    'hmm':{
+      'states':['a','b','c','d','e'],
+      'symbols':['E','NE','N','NW','W','WS','S','ES'],
+      'startProbability':{'a':0.1,'b':0.1,'c':0.1,'d':0.1,'e':0.1},
+      'minimalProbabilityFactor':0.99
     }
       });
 

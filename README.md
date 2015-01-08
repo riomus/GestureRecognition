@@ -5,6 +5,9 @@ Library that can be used to recognize gesturese recorded by web cammera. Library
 ## About
 
 A JavaScript library by Roman Bartusiak.
+
+Current Version: **[0.0.1](https://github.com/riomus/GestureRecognition/tree/v0.0.1)**
+
 Check demo page in [here](http://riomus.github.io/GestureRecognition/)
 
 ## Installation

@@ -30,7 +30,8 @@ var GestureRecognition = function(providedConfig) {
       'height':150
     },
     'onMove':[],
-    'minimalMovementVectorLength':0.05
+    'minimalMovementVectorLength':0.05,
+    'continousTracking':true
   };
   for (var attrname in providedConfig)  {
     this.config[attrname] = providedConfig[attrname];
@@ -60,19 +61,30 @@ var GestureRecognition = function(providedConfig) {
    root.tracking.track(this.config.getVideoElement(), opticalFlowTracker, { camera: true });
  };
 
+ this.stopContinousGestureStracking=function(){
+   this.config.continousTracking=false;
+ };
+
+ this.startContinousGestureStracking=function(){
+   this.config.continousTracking=true;
+ };
+
  for(var gestureName in this.config.gestures){
   this.teach(gestureName,this.config.gestures[gestureName]);
 }
 
 opticalFlowTracker.on('track',function(data){
- var movementVector=[data.xAvg,data.yAvg];
- var vectorLength=Math.sqrt(movementVector[0]*movementVector[0]+movementVector[1]*movementVector[1]);
+  var movementVector=[data.xAvg,data.yAvg];
+  var vectorLength=Math.sqrt(movementVector[0]*movementVector[0]+movementVector[1]*movementVector[1]);
 
- if(vectorLength>this.config.minimalMovementVectorLength){
+  if(vectorLength>this.config.minimalMovementVectorLength){
    var directionAngle=Math.atan2(movementVector[1],movementVector[0]);
    var directionSymbol=discretizeDirection(directionAngle);
    triggerOnMove(directionSymbol);
    hmmModel.newSymbol(directionSymbol);
+   if(this.config.continousTracking){
+     this.hmmModel.newSymbol(directionSymbol);
+   }
  }
 }.bind(this));
 

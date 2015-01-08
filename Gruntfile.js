@@ -66,7 +66,28 @@ module.exports = function(grunt) {
     watch: {
       files: ['<%= jshint.files %>'],
       tasks: ['concat', 'jshint', 'qunit']
+    },
+    versioner: {
+    options: {
+      bump: true,
+      file: 'package.json',
+      gitAdd: true,
+      gitCommit: false,
+      gitPush: false,
+      gitTag: false,
+      gitPushTag: false,
+      npm: false
+    },
+    default: {
+      files: {
+        './package.json': ['./package.json'],
+        './bower.json': ['./bower.json'],
+        './README.md': ['./README.md'],
+        './src/main.js': ['./src/main.js'],
+        './src/opticalFlowTracker.js': ['./src/opticalFlowTracker.js']
+      }
     }
+  }
 
   });
 
@@ -78,6 +99,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-serve');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
+grunt.loadNpmTasks('grunt-versioner');
   grunt.registerTask('test', ['jshint', 'qunit']);
   grunt.registerTask('default', ['concat', 'jshint', 'qunit', 'uglify','clean','copy']);
 

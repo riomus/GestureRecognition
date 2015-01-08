@@ -1,6 +1,6 @@
 {
   "name": "GestureRecognition",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "dist/GestureRecognition.min.js",
   "ignore": [
     "**/.*",
@@ -9,8 +9,8 @@
     "test"
   ],
   "dependencies": {
-    "optical-flow.js":"*",
-    "hmm.js":"*",
+    "optical-flow.js":"~0.0.7",
+    "hmm.js":"~0.0.1",
     "tracking.js":"1.1.0"
   }
 }

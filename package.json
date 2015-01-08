@@ -1,6 +1,6 @@
 {
   "name": "GestureRecognition",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "dist/GestureRecognition.min.js",
   "description": "Library that can be used to recognize gesturese recorded by web cammera. Library use Optical Flow for movement recognition and Hidden Markov Models for detection",
   "repository": {
@@ -21,6 +21,7 @@
     "grunt-serve":"~0.1.6",
     "grunt-contrib-copy":"*",
     "grunt-contrib-clean":"~0.6.0",
-    "grunt-contrib-qunit": "~0.3.0"
+    "grunt-contrib-qunit": "~0.3.0",
+    "grunt-versioner": "^0.1.7"
   }
 }
