@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GestureRecognition demo</title>
+  <link rel="stylesheet" href="./assets/normalize.css" />
+  <link rel="stylesheet" href="./assets/main.css" />
+  <style>
+    /* begin demo embedded styles */
+
+    /* end demo embedded styles */
+  </style>
+</head>
+<body>
+  <h1>GestureRecognition demo</h1>
+
+  <h3>Movement: <span class="movement"></span></h3>
+  <h3>Gesture: <span class="gesture"></span></h3>
+  <p><label><input type="checkbox" class="gatherGesture"/>Gather gesture</label></p>
+  <h3>Gathered gesture: <span class="gatheredGesture"></span></h3>
+  <p><button class="clearGesture">Clear gesture</button></p>
+  <p>See the <a href="http://riomus.github.io/GestureRecognition">project homepage</a>.
+    <p>Check out the <a href="https://github.com/riomus/GestureRecognition">project repo</a>.
+      <p>Copyright 2014 Roman Bartusiak</p>
+
+      <script src="js/tracking-min.js"></script>
+      <script src="js/HMM.js"></script>
+      <script src="js/OpticalFlow.min.js"></script>
+      <script src="js/GestureRecognition.js"></script>
+
+      <script>
+        /* begin demo script */
+
+        var gestureRecognition =new GestureRecognition({
+          'getVideoElement':function(){
+            var element=document.createElement('video');
+            element.style.position='absolute';
+            element.style.right='10px';
+            element.style.top='10px';
+            element.style.width='200px';
+            element.style.height='150px';
+            element.autoplay=true;
+            element.preload=true;
+            element.muted=true;
+            element.looped=true;
+            document.body.appendChild(element);
+            return element;
+          },
+          'hmm':{
+      'states':['a','b','c','d','e'],
+      'symbols':['E','NE','N','NW','W','WS','S','ES'],
+      'startProbability':{'a':0.33,'b':0.33,'c':0.33,'d':0.33,'e':0.33},
+      'matchFactor':0.000005,
+      'minimalProbabilityFactor':0.8,
+      'minimalLengthFactor':0.60,
+    modelInitializer:function(model){
+      model.initializeDiagonalProbabilities();}
+    }
+
+        });
+
+gestureRecognition.startTracking();
+var movementElement=document.querySelector('.movement');
+var gestureElement=document.querySelector('.gesture');
+var gatherGestureCheckbox=document.querySelector('.gatherGesture');
+var gatheredGesture=document.querySelector('.gatheredGesture');
+var clearGesture=document.querySelector('.clearGesture');
+
+clearGesture.onclick=function(){gatheredGesture.innerHTML='';};
+
+gestureRecognition.onMove(function(data){
+  movementElement.innerHTML=data;
+  if(gatherGestureCheckbox.checked){
+    gatheredGesture.innerHTML=gatheredGesture.innerHTML+"\'"+data+"\', ";
+  }
+});
+
+var timer=setTimeout(function(){},0);
+gestureRecognition.onDetect(function(data){
+  clearTimeout(timer);
+  console.log(data);
+  gestureElement.innerHTML=data.name+' '+data.data[0];
+  timer=setTimeout(function(){
+    gestureElement.innerHTML='';
+  },1000);
+});
+
+console.log(gestureRecognition);
+
+/* end demo script */
+</script>
+</body>
+</html>

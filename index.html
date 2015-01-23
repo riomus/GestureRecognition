@@ -1,70 +1,99 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>GestureRecognition demo</title>
-    <link rel="stylesheet" href="./assets/normalize.css" />
-    <link rel="stylesheet" href="./assets/main.css" />
-    <style>
-      /* begin demo embedded styles */
+<head>
+  <title>GestureRecognition demo</title>
+  <link rel="stylesheet" href="./assets/normalize.css" />
+  <link rel="stylesheet" href="./assets/main.css" />
+  <style>
+    /* begin demo embedded styles */
 
-      /* end demo embedded styles */
-    </style>
-  </head>
-  <body>
-    <h1>GestureRecognition demo</h1>
+    /* end demo embedded styles */
+  </style>
+</head>
+<body>
+  <h1>GestureRecognition demo</h1>
 
-    <h3>Movement: <span class="movement"></span></h3>
-    <h3>Gesture: <span class="gesture"></span></h3>
-
-    <p>See the <a href="http://riomus.github.io/GestureRecognition">project homepage</a>.
+  <h3>Movement: <span class="movement"></span></h3>
+  <h3>Gesture: <span class="gesture"></span></h3>
+  <p><label><input type="checkbox" class="gatherGesture"/>Gather gesture</label></p>
+  <h3>Gathered gesture: <span class="gatheredGesture"></span></h3>
+  <p><button class="clearGesture">Clear gesture</button></p>
+  <p>See the <a href="http://riomus.github.io/GestureRecognition">project homepage</a>.
     <p>Check out the <a href="https://github.com/riomus/GestureRecognition">project repo</a>.
-    <p>Copyright 2014 Roman Bartusiak</p>
+      <p>Copyright 2014 Roman Bartusiak</p>
+      <a href="simple.html">Demo with simple gestures</a>
+      <script src="js/tracking-min.js"></script>
+      <script src="js/HMM.js"></script>
+      <script src="js/OpticalFlow.min.js"></script>
+      <script src="js/GestureRecognition.js"></script>
 
-    <script src="js/tracking-min.js"></script>
-    <script src="js/HMM.min.js"></script>
-    <script src="js/OpticalFlow.min.js"></script>
-    <script src="js/GestureRecognition.min.js"></script>
+      <script>
+        /* begin demo script */
 
-    <script>
-      /* begin demo script */
+        var gestureRecognition =new GestureRecognition({
+          'getVideoElement':function(){
+            var element=document.createElement('video');
+            element.style.position='absolute';
+            element.style.right='10px';
+            element.style.top='10px';
+            element.style.width='200px';
+            element.style.height='150px';
+            element.autoplay=true;
+            element.preload=true;
+            element.muted=true;
+            element.looped=true;
+            document.body.appendChild(element);
+            return element;
+          },
+          'hmm':{
+      'states':['a','b','c','d','e','f'],
+      'symbols':['E','NE','N','NW','W','WS','S','ES'],
+      'startProbability':{'a':0.33,'b':0.33,'c':0.33,'d':0.33,'e':0.33,'f':0.33},
+      'matchFactor':0.000000005,
+      'minimalProbabilityFactor':0.98,
+      'minimalLengthFactor':0.9,
+    modelInitializer:function(model){
+      model.initializeDiagonalProbabilities();}
+    },
+      'gestures':{
+        'upDownT':[['W', 'N', 'NE', 'NE', 'N', 'N', 'N', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'W', 'W', 'NE', 'NE', 'NE', 'NE', 'NE', 'E', 'E', 'E', 'E', 'E'],['N', 'N', 'NE', 'N', 'N', 'N', 'NW', 'WS', 'S', 'WS', 'WS', 'WS', 'W', 'W', 'W', 'W', 'NE', 'NE', 'NE', 'NE', 'NE', 'E', 'E', 'E'],['N', 'N', 'N', 'N', 'N', 'N', 'WS', 'S', 'WS', 'WS', 'WS', 'S', 'WS', 'W', 'W', 'W', 'WS', 'NE', 'NE', 'NE', 'NE', 'NE', 'N', 'E', 'E'],['W', 'NW', 'N', 'NE', 'N', 'N', 'N', 'NW', 'WS', 'S', 'WS', 'WS', 'S', 'S', 'WS', 'W', 'W', 'W', 'W', 'NW', 'NE', 'NE', 'NE', 'NE', 'NE', 'E', 'E', 'ES'],[ 'W', 'N', 'NE', 'NE', 'NE', 'N', 'N', 'N', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'W', 'W', 'W', 'NE', 'E', 'E', 'NE', 'NE', 'E', 'E', 'E', 'E'],['NW', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'S', 'S', 'S', 'WS', 'WS', 'S', 'WS', 'W', 'W', 'W', 'W', 'NE', 'NE', 'E', 'E', 'NE', 'NE', 'E', 'E', 'E'],['W', 'NW', 'N', 'NE', 'N', 'N', 'N', 'N', 'W', 'S', 'S', 'WS', 'WS', 'WS', 'S', 'WS', 'WS', 'W', 'W', 'W', 'NE', 'NE', 'E', 'E', 'NE', 'NE', 'NE', 'E'],['N', 'N', 'N', 'N', 'N', 'N', 'N', 'WS', 'S', 'S', 'WS', 'WS', 'S', 'WS', 'WS', 'W', 'W', 'W', 'W', 'NE', 'NE', 'E', 'NE', 'NE', 'NE', 'NE'],['NE', 'NE', 'NE', 'N', 'N', 'N', 'W', 'S', 'S', 'WS', 'WS', 'WS', 'S', 'WS', 'W', 'W', 'W', 'W', 'W', 'NE', 'NE', 'E', 'E', 'NE', 'NE', 'E', 'NE', 'E']],
+        'heart':[[ 'NE', 'NE', 'NE', 'NE', 'W', 'W', 'W', 'WS', 'WS', 'S', 'WS', 'N', 'N', 'W', 'WS', 'WS', 'WS', 'WS', 'WS', 'S', 'S', 'ES', 'ES', 'ES', 'ES', 'ES'],['NE', 'NE', 'NE', 'NE', 'NW', 'W', 'W', 'WS', 'WS', 'WS', 'WS', 'NE', 'NE', 'N', 'WS', 'WS', 'WS', 'WS', 'WS', 'S', 'S', 'ES', 'ES', 'E'],[ 'NE', 'NE', 'NE', 'NE', 'NW', 'W', 'W', 'WS', 'WS', 'WS', 'S', 'NE', 'NE', 'W', 'WS', 'WS', 'WS', 'WS', 'S', 'ES', 'E', 'E', 'ES', 'ES'],['NE', 'NE', 'N', 'W', 'W', 'W', 'W', 'WS', 'WS', 'S', 'ES', 'NE', 'N', 'W', 'WS', 'WS', 'WS', 'WS', 'WS', 'ES', 'ES', 'E', 'E'],['E', 'NE', 'NE', 'NE', 'NE', 'NE', 'NW', 'NW', 'W', 'W', 'WS', 'WS', 'S', 'S', 'N', 'N', 'NW', 'W', 'WS', 'WS', 'WS', 'WS', 'S', 'WS', 'S', 'E', 'E', 'E', 'E']],
+          'heart ':[[ 'E', 'NE', 'NE', 'NE', 'NE', 'N', 'N', 'NW', 'NW', 'W', 'W', 'WS', 'WS', 'WS', 'NE', 'NE', 'N', 'W', 'WS', 'WS', 'WS', 'WS', 'WS', 'ES', 'E', 'E', 'ES', 'ES', 'ES', 'ES'],['E', 'N', 'NE', 'NE', 'NW', 'NW', 'NW', 'W', 'WS', 'WS', 'WS', 'S', 'NE', 'N', 'NW', 'WS', 'WS', 'WS', 'WS', 'S', 'E', 'E', 'E', 'ES', 'ES'],['E', 'NE', 'NE', 'NE', 'NE', 'N', 'N', 'NW', 'NW', 'WS', 'WS', 'WS', 'S', 'NE', 'N', 'W', 'WS', 'WS', 'WS', 'WS', 'S', 'ES', 'E', 'E', 'E', 'E', 'ES'],['NW', 'NE', 'NE', 'NE', 'NE', 'N', 'N', 'NW', 'W', 'WS', 'WS', 'WS', 'S', 'NE', 'N', 'W', 'WS', 'WS', 'WS', 'WS', 'ES', 'ES', 'E', 'E', 'ES', 'ES', 'E']],
+        'upDownT ':[[ 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'W', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'W', 'WS', 'WS', 'WS', 'WS', 'W', 'NE', 'N', 'NE', 'N', 'NE', 'ES'],['NE', 'NE', 'NE', 'NE', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'W', 'W', 'W', 'WS', 'WS', 'WS', 'W', 'W', 'NE', 'NE', 'NE', 'NE', 'NE', 'E', 'ES'],['NW', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'S', 'W', 'W', 'S', 'WS', 'WS', 'WS', 'W', 'NE', 'NE', 'N', 'N', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],['NE', 'NE', 'NE', 'NE', 'NE', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'S', 'S', 'S', 'W', 'W', 'W', 'WS', 'W', 'WS', 'W', 'W', 'NE', 'NE', 'NE', 'N', 'NE', 'E', 'ES']],
+        'upDownT  ':[[ 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'W', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'W', 'WS', 'WS', 'WS', 'WS', 'W', 'NE', 'N', 'NE', 'N', 'NE', 'ES'],['NE', 'NE', 'NE', 'NE', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'W', 'W', 'W', 'WS', 'WS', 'WS', 'W', 'W', 'NE', 'NE', 'NE', 'NE', 'NE', 'E', 'ES'],['NW', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'S', 'W', 'W', 'S', 'WS', 'WS', 'WS', 'W', 'NE', 'NE', 'N', 'N', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],['NE', 'NE', 'NE', 'NE', 'NE', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'WS', 'S', 'S', 'S', 'W', 'W', 'W', 'WS', 'W', 'WS', 'W', 'W', 'NE', 'NE', 'NE', 'N', 'NE', 'E', 'ES']]
+      }
 
-      var gestureRecognition =new GestureRecognition({
-        'getVideoElement':function(){
-      var element=document.createElement('video');
-      element.style.position='absolute';
-      element.style.right='10px';
-      element.style.top='10px';
-      element.style.width='200px';
-      element.style.height='150px';
-      element.autoplay=true;
-      element.preload=true;
-      element.muted=true;
-      element.looped=true;
-      document.body.appendChild(element);
-      return element;
-    }
-      });
+        });
 
-      gestureRecognition.startTracking();
-      var movementElement=document.querySelector('.movement');
-      var gestureElement=document.querySelector('.gesture');
+gestureRecognition.startTracking();
+var movementElement=document.querySelector('.movement');
+var gestureElement=document.querySelector('.gesture');
+var gatherGestureCheckbox=document.querySelector('.gatherGesture');
+var gatheredGesture=document.querySelector('.gatheredGesture');
+var clearGesture=document.querySelector('.clearGesture');
 
-      gestureRecognition.onMove(function(data){
-        movementElement.innerHTML=data;
-      });
+clearGesture.onclick=function(){gatheredGesture.innerHTML='';};
 
-      var timer=setTimeout(function(){},0);
-      gestureRecognition.onDetect(function(data){
-        clearTimeout(timer);
-        gestureElement.innerHTML=data.name+' '+data.data[0];
-        timer=setTimeout(function(){
-        gestureElement.innerHTML='';
-        },1000);
-      });
+gestureRecognition.onMove(function(data){
+  movementElement.innerHTML=data;
+  if(gatherGestureCheckbox.checked){
+    gatheredGesture.innerHTML=gatheredGesture.innerHTML+"\'"+data+"\', ";
+  }
+});
 
-      console.log(gestureRecognition);
+var timer=setTimeout(function(){},0);
+gestureRecognition.onDetect(function(data){
+  clearTimeout(timer);
+  console.log(data);
+  gestureElement.innerHTML=data.name+' '+data.data[0];
+  timer=setTimeout(function(){
+    gestureElement.innerHTML='';
+  },1000);
+});
 
-      /* end demo script */
-    </script>
-  </body>
+console.log(gestureRecognition);
+
+/* end demo script */
+</script>
+</body>
 </html>
