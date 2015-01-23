@@ -1,6 +1,6 @@
 {
   "name": "GestureRecognition",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "dist/GestureRecognition.min.js",
   "description": "Library that can be used to recognize gesturese recorded by web cammera. Library use Optical Flow for movement recognition and Hidden Markov Models for detection",
   "repository": {
