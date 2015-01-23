@@ -10,7 +10,7 @@
   ],
   "dependencies": {
     "optical-flow.js":"~0.0.7",
-    "hmm.js":"~0.0.1",
+    "hmm.js":"~0.0.5",
     "tracking.js":"1.1.0"
   }
 }

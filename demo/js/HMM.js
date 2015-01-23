@@ -13,7 +13,7 @@ var HMM = function(providedConfig){
       transitionProbabilities:{},
       emissionProbabilities:{},
       startProbability:{},
-      matchFactor:0.01
+      matchFactor:0.05
     };
 
     for (var attrname in providedConfig)  {
@@ -157,7 +157,7 @@ var HMM = function(providedConfig){
   };
 
 // Version.
-HMM.VERSION = '0.0.1';
+HMM.VERSION = '0.0.5';
 
 
 // Export to the root, which is probably `window`.
@@ -168,7 +168,8 @@ root.HMM = HMM;
 var ContinousHMM = function(providedConfig){
     this.config={
       standardHiddenMarkovModel:HMM,
-      minimalProbabilityFactor:0.95
+      minimalProbabilityFactor:0.95,
+      minimalLengthFactor:0.95
     };
 
     for (var attrname in providedConfig)  {
@@ -191,7 +192,7 @@ var ContinousHMM = function(providedConfig){
       var foundMatch=false;
       measuringObservations=measuringObservations.filter(function(observation){
         var measuredProbability=this.calculatePath(observation);
-        if(observation.length>=this.averageObservationLength&&!foundMatch){
+        if(observation.length>=this.averageObservationLength*this.config.minimalLengthFactor&&!foundMatch){
           if(measuredProbability[0]>this.averageProbability*this.config.minimalProbabilityFactor){
             foundMatch=true;
             detectCallback.forEach(function(callback){
@@ -217,10 +218,10 @@ var ContinousHMM = function(providedConfig){
 
 
     this.teach=function(observations){
-      this.averageObservationLength=observations.reduce(function(r,observation){return Math.min(r,observation.length);},9999999999);
+      this.averageObservationLength=observations.reduce(function(r,observation){return r+observation.length;},0)/observations.length;
       this.standardHiddenMarkovModel.teach(observations);
       this.averageProbability=observations.map(function(observation){return this.calculatePath(observation);}.bind(this))
-      .map(function(path){return path[0];}).reduce(function(r,prob){return Math.min(r,prob);},15);
+      .map(function(path){return path[0];}).reduce(function(r,prob){return r+prob;},0)/observations.length;
     };
 
     this.initializeDefaultProbabilities=function(){
@@ -238,7 +239,7 @@ var ContinousHMM = function(providedConfig){
   };
 
 // Version.
-ContinousHMM.VERSION = '0.0.1';
+ContinousHMM.VERSION = '0.0.5';
 
 
 // Export to the root, which is probably `window`.
@@ -261,7 +262,7 @@ var MultiGestureHMM = function(providedConfig){
     var gesturesNames=[];
     var globalCallbacks=[];
 
-    var resetAllModels = function(){
+    this.reset = function(){
       gesturesNames.forEach(function(gestureName){gesturesModels[gestureName].reset();});
     };
 
@@ -295,8 +296,6 @@ var MultiGestureHMM = function(providedConfig){
     model.teach(observations);
     gesturesModels[geasture]=model;
     gesturesNames.push(geasture);
-    model.onDetect(resetAllModels);
-
     globalCallbacks.forEach(function(callback){
       model.onDetect(function(data){callback({'name':geasture,'data':data});});
     });
@@ -304,7 +303,7 @@ var MultiGestureHMM = function(providedConfig){
 };
 
 // Version.
-MultiGestureHMM.VERSION = '0.0.1';
+MultiGestureHMM.VERSION = '0.0.5';
 
 
 // Export to the root, which is probably `window`.
