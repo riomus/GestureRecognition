@@ -47,7 +47,7 @@ var discretizeDirection=function(directionAngle){
       this.lastFrame=pixels;
   };
 
-OpticalFlowTracker.VERSION='0.0.1';
+OpticalFlowTracker.VERSION='0.0.2';
 
 root.OpticalFlowTracker=OpticalFlowTracker;
 
@@ -149,7 +149,7 @@ var GestureRecognition = function(providedConfig) {
 
 
 // Version.
-GestureRecognition.VERSION = '0.0.1';
+GestureRecognition.VERSION = '0.0.2';
 
 
 // Export to the root, which is probably `window`.

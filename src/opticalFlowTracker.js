@@ -18,6 +18,6 @@
       this.lastFrame=pixels;
   };
 
-OpticalFlowTracker.VERSION='0.0.1';
+OpticalFlowTracker.VERSION='0.0.2';
 
 root.OpticalFlowTracker=OpticalFlowTracker;
